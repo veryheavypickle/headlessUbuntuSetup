@@ -18,6 +18,8 @@ installDocker() {
 	# make sudoless execution of docker stuff
 	sudo usermod -aG docker ${USER}
 	su - ${USER}
+
+	sudo apt  install docker-compose -y
 }
 
 main
