@@ -3,6 +3,8 @@
 main() {
 	sudo apt upgrade -y
 	sudo apt update
+	installDocker
+	sudo apt autoremove
 }
 
 installDocker() {
