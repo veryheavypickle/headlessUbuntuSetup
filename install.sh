@@ -4,7 +4,8 @@ main() {
 	sudo apt upgrade -y
 	sudo apt update
 	sudo apt install lm-sensors -y  # command 'sensors' to check cpu temps
-	
+
+	installMySQL
 	installDocker
 	sudo apt autoremove
 }
@@ -22,6 +23,11 @@ installDocker() {
 	su - ${USER}
 
 	sudo apt  install docker-compose -y
+}
+
+installMySQL() {
+	sudo apt install mysql-server
+	# https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
 }
 
 main
