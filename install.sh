@@ -3,6 +3,8 @@
 main() {
 	sudo apt upgrade -y
 	sudo apt update
+	sudo apt install lm-sensors -y  # command 'sensors' to check cpu temps
+	
 	installDocker
 	sudo apt autoremove
 }
