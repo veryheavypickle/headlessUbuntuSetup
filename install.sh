@@ -27,6 +27,8 @@ installDocker() {
 
 installMySQL() {
 	sudo apt install mysql-server
+	# https://phoenixnap.com/kb/mysql-remote-connection to allow remote connection2
+	# to uninstall https://www.linuxshelltips.com/completely-uninstall-mysql-server-in-ubuntu/
 	# https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
 }
 
