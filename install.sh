@@ -22,7 +22,7 @@ installDocker() {
 	sudo usermod -aG docker ${USER}
 	su - ${USER}
 
-	sudo apt  install docker-compose -y
+	sudo apt install docker-compose -y
 }
 
 installMySQL() {
