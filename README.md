@@ -33,12 +33,17 @@ At the undervolt I have, this is sufficient since the watercooler pump always ru
 65°C: 100%
 ```
 
-Headless
---------
-With help from [KVM GPU Passthrough](https://bananaapple.tw/blog/kvm-gpu-passthrough-ubuntu-20-04/) I can set up the changes necessasary to pass the GPU to a VM.
-I will make a copy of the instructions above incase the site no longer exists when I need it.
+Headless Setup
+--------------
+## Setup for AMD and NVIDIA GPUs on Intel or AMD CPUs
+With help from [KVM GPU Passthrough](https://bananaapple.tw/blog/kvm-gpu-passthrough-ubuntu-20-04/) I can set up the changes necessasary to pass the GPU to a VM. I have modified these instructions for an AMD GPU but have included the original an NVIDIA GPU too.
 
-### Enable IOMMU
+
+## Enable IOMMU
+### In BIOS
+Boot into BIOS and set IOMMU to Enabled
+
+### Configure GRUB
 Edit `/etc/default/grub`
 ```
 # Intel CPU
@@ -52,3 +57,70 @@ GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1"
 
 ### Reboot
 `sudo shutdown now`
+
+### Verify IOMMU is enabled
+`sudo dmesg | grep IOMMU`
+
+Output without GPU connected
+```
+[    0.264796] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
+[    0.265662] pci 0000:00:00.2: AMD-Vi: Found IOMMU cap 0x40
+[    0.266137] perf/amd_iommu: Detected AMD IOMMU #0 (2 banks, 4 counters/bank).
+```
+
+Output with GPU connected
+```
+[    0.265787] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
+[    0.266951] pci 0000:00:00.2: AMD-Vi: Found IOMMU cap 0x40
+[    0.267833] perf/amd_iommu: Detected AMD IOMMU #0 (2 banks, 4 counters/bank).
+[    3.119906] AMD-Vi: AMD IOMMUv2 loaded and initialized
+```
+
+**For the remainder of this, I left the GPU connected.**
+
+## Enable IOMMU group
+`for a in /sys/kernel/iommu_groups/*; do find $a -type l; done | sort --version-sort`
+
+Output should be something like
+```
+/sys/kernel/iommu_groups/0/devices/0000:00:00.0
+/sys/kernel/iommu_groups/1/devices/0000:00:04.0
+/sys/kernel/iommu_groups/2/devices/0000:00:04.1
+/sys/kernel/iommu_groups/3/devices/0000:00:04.2
+/sys/kernel/iommu_groups/4/devices/0000:00:04.3
+```
+
+## Using vfio-pci to manage PCI device
+This will show all the VGA controllers (AMD or NVIDIA) `lspci -nn | grep -i VGA`
+Output
+`0a:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [1002:7340] (rev c5)`
+
+This will show all the Audio controllers for AMD `lspci -nn | grep -i AMD | grep Audio`. I am assuming I need the HDMI sound as a seperate device.
+```
+0a:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 HDMI Audio [1002:ab38]
+0c:00.4 Audio device [0403]: Advanced Micro Devices, Inc. [AMD] Starship/Matisse HD Audio Controller [1022:1487]
+```
+
+Extracted data for the GPU
+PCI ID `0a:00.0`
+Vendor ID: `1002`
+Device ID: `7340`
+
+Data for HDMI audio controller
+PCI ID `0c:00.4`
+Vendor ID: `1002`
+Device ID: `ab38`
+
+### Configure GRUB
+`/etc/default/grub`
+Apply all the audio and VGA devices
+
+`GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 vfio-pci.ids=1002:7340,1002:ab38"`
+
+### Update GRUB
+`sudo update-grub`
+
+### Reboot
+`sudo reboot`
+
+When rebooted, the screen shows only the Aorus logo, this seems to be good news.
