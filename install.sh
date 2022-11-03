@@ -3,11 +3,16 @@
 main() {
 	sudo apt upgrade -y
 	sudo apt update
-	sudo apt install lm-sensors -y  # command 'sensors' to check cpu temps
-
+	
+	installPackages
 	installMySQL
 	installDocker
 	sudo apt autoremove
+}
+
+installPackages() {
+	sudo apt install lm-sensors -y  # command 'sensors' to check cpu temps
+	sudo apt install stress -y
 }
 
 installDocker() {
