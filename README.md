@@ -161,3 +161,40 @@ Scroll down to the line beginning with your PCI ID
         Kernel driver in use: vfio-pci
         Kernel modules: snd_hda_intel
 ```
+
+## Test GPU passthrough on kvm instance
+Install virt-install
+`sudo apt install -y virtinst virt-manager qemu-efi`
+
+Download an OS, in my case I am downloading linux mint
+`wget link-to-iso-file`
+
+Create a virtual disk
+`qemu-img create -f raw mint.img +25G`
+
+Move the `.iso` and `.img` file to `/home/` to avoid the error `file may not be accessible by the hypervisor. ..`. Also download the [windows 10 drivers](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso) and move it to `/home/`.
+
+Run `virt-intsall`. in this example I will run Windows 10, I assumed debian9. The important flags are `--host-device ...` and `--features kvm_hidden=on`
+
+```
+sudo virt-install \
+--virt-type kvm \
+--name=win10 \
+--os-variant=win10 \
+--vcpus 2 \
+--cpu host-passthrough \
+--memory 4096 \
+--disk path=/home/win10.img,size=40,format=raw,sparse=true,bus=scsi,cache=writethrough,discard=unmap,io=threads \
+--controller type=scsi,model=virtio-scsi \
+--channel unix,target_type=virtio,name=org.qemu.guest_agent.0 \
+--metadata title='Windows 10' \
+--disk /home/virtio-win.iso,device=cdrom \
+--cdrom /home/Win10_22H2_EnglishInternational_x64.iso \
+--graphics none \
+--boot loader=/usr/share/OVMF/OVMF_CODE.fd,loader.readonly=yes,loader.type=pflash \
+--host-device 0a:00.0,address.type=pci,address.multifunction=on \
+--hostdev 05:00.3 \
+--features kvm_hidden=on
+```
+
+I am stuck on Q35
