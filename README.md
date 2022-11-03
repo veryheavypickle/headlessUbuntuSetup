@@ -92,19 +92,30 @@ Output should be something like
 
 ## Using vfio-pci to manage PCI device
 This will show all the VGA controllers (AMD or NVIDIA) `lspci -nn | grep -i VGA`
-Output
 `0a:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [1002:7340] (rev c5)`
 
-This will show all the Audio controllers for AMD `lspci -nn | grep -i AMD | grep Audio`. I am assuming I need the HDMI sound as a seperate device.
+Show USB controllers, as I will probably need USB `lspci -nn | grep -i USB`
+```
+05:00.1 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 Host Controller [1022:149c]
+05:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 Host Controller [1022:149c]
+0c:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 Host Controller [1022:149c]
+```
+
+Show all the Audio controllers for AMD `lspci -nn | grep Audio`. I am assuming I need the HDMI sound as a seperate device.
 ```
 0a:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 HDMI Audio [1002:ab38]
 0c:00.4 Audio device [0403]: Advanced Micro Devices, Inc. [AMD] Starship/Matisse HD Audio Controller [1022:1487]
 ```
 
-Extracted data for the GPU
+Data for the GPU
 PCI ID `0a:00.0`
 Vendor ID: `1002`
 Device ID: `7340`
+
+Data for a random USB controller, since I would rather try one of the 3 usb controllers.
+PCI ID `05:00.3`
+Vendor ID: `1022`
+Device ID: `149c`
 
 Data for HDMI audio controller
 PCI ID `0c:00.4`
@@ -115,7 +126,7 @@ Device ID: `ab38`
 `/etc/default/grub`
 Apply all the audio and VGA devices
 
-`GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 vfio-pci.ids=1002:7340,1002:ab38"`
+`GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 vfio-pci.ids=1002:7340,1022:149c,1002:ab38"`
 
 ### Update GRUB
 `sudo update-grub`
@@ -124,3 +135,29 @@ Apply all the audio and VGA devices
 `sudo reboot`
 
 When rebooted, the screen shows only the Aorus logo, this seems to be good news.
+
+### Verify PCI device is managed by vfio-pci
+`lspci -nnv`
+
+Scroll down to the line beginning with your PCI ID
+```
+0a:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [1002:7340] (rev c5) (prog-if 00 [VGA controller])
+        Subsystem: Tul Corporation / PowerColor Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [148c:2401]
+        Flags: bus master, fast devsel, latency 0, IRQ 10, IOMMU group 23
+        Memory at d0000000 (64-bit, prefetchable) [size=256M]
+        Memory at e0000000 (64-bit, prefetchable) [size=2M]
+        I/O ports at e000 [size=256]
+        Memory at fce00000 (32-bit, non-prefetchable) [size=512K]
+        Expansion ROM at 000c0000 [disabled] [size=128K]
+        Capabilities: <access denied>
+        Kernel driver in use: vfio-pci
+        Kernel modules: amdgpu
+
+0a:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 HDMI Audio [1002:ab38]
+        Subsystem: Tul Corporation / PowerColor Navi 10 HDMI Audio [148c:2401]
+        Flags: bus master, fast devsel, latency 0, IRQ 4, IOMMU group 24
+        Memory at fcea0000 (32-bit, non-prefetchable) [size=16K]
+        Capabilities: <access denied>
+        Kernel driver in use: vfio-pci
+        Kernel modules: snd_hda_intel
+```
