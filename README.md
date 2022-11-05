@@ -203,30 +203,35 @@ macOS VM
 
 With help from [these notes](https://github.com/kholia/OSX-KVM/blob/master/notes.md) and the setup from [OSX-KVM](https://github.com/kholia/OSX-KVM). I was able to create this.
 
-Steps I followed 
+### Install necessary packages 
 ```
 sudo apt-get install qemu uml-utilities virt-manager git \
     wget libguestfs-tools p7zip-full make dmg2img -y
 ```
 
-// Edited /etc/modprobe.d/vfio.conf
-// Blacklist modules at /etc/modprobe.d/blacklist.conf
 
-
-Cloned repo
+### Clone OSX-KVM
 ```
-cd ~
-
 git clone --depth 1 --recursive https://github.com/kholia/OSX-KVM.git
-
 cd OSX-KVM
 ```
 
+### Download macOS
+In this case, I went with the reccomendation
+```
 ./fetch-macOS-v2.py
+```
 
+### Configure disk
+```
 dmg2img -i BaseSystem.dmg BaseSystem.img
-
 qemu-img create -f qcow2 mac_hdd_ng.img 128G
+```
 
-Then edited boot-passthrough.sh
+### Edit config to allow passthrough
+Change the USB, GPU and GPU audio addresses to the ones found above in `boot-passthrough.sh` .
 
+### Run the VM
+```
+sudo ./boot-passthrough.sh
+```
