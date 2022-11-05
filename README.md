@@ -125,9 +125,9 @@ Vendor ID: 1002
 Device ID: 7340
 ```
 
-Data for a random USB controller
+Data for a last USB controller
 ```
-PCI ID: 05:00.3
+PCI ID: 0c:00.3
 Vendor ID: 1022
 Device ID: 149c
 ```
@@ -145,9 +145,28 @@ Apply all the audio and VGA devices plus extra arguments
 ```
 GRUB_CMDLINE_LINUX_DEFAULT="iommu=pt amd_iommu=on vfio-pci.ids=1002:7340,1002:ab38,1022:149c kvm.ignore_msrs=1 video=vesafb:off,efifb:off"
 ```
+In my case, I had an issue with `vfio_region_write device or resource busy`, I fixed this by removing the option `vesafb:off` from above.
+
+### Blacklist drivers
+At the end of `/etc/modprobe.d/blacklist.conf`, add
+```
+blacklist amdgpu
+blacklist radeon
+```
+
+### Edit VFIO config
+I am not sure if this is necessary. In `/etc/modprobe.d/vfio.conf`. Change the following settings (if the file exits at all!)
+```
+options vfio-pci ids=1002:67df,1002:aaf0 disable_vga=1
+softdep radeon pre: vfio-pci
+softdep amdgpu pre: vfio-pci
+softdep nouveau pre: vfio-pci
+softdep drm pre: vfio-pci
+```
 
 ### Update GRUB
 `sudo update-grub`
+`sudo update-initramfs -k all -u`
 
 ### Reboot
 `sudo reboot`
@@ -185,9 +204,30 @@ macOS VM
 
 With help from [these notes](https://github.com/kholia/OSX-KVM/blob/master/notes.md) and the setup from [OSX-KVM](https://github.com/kholia/OSX-KVM). I was able to create this.
 
-### Blacklist
-vim /etc/modprobe.d/blacklist.conf
+Steps I followed 
+```
+sudo apt-get install qemu uml-utilities virt-manager git \
+    wget libguestfs-tools p7zip-full make dmg2img -y
+```
 
-blacklist amdgpu
-blacklist radeon
+// Edited /etc/modprobe.d/vfio.conf
+// Blacklist modules at /etc/modprobe.d/blacklist.conf
+
+
+Cloned repo
+```
+cd ~
+
+git clone --depth 1 --recursive https://github.com/kholia/OSX-KVM.git
+
+cd OSX-KVM
+```
+
+./fetch-macOS-v2.py
+
+dmg2img -i BaseSystem.dmg BaseSystem.img
+
+qemu-img create -f qcow2 mac_hdd_ng.img 128G
+
+Then edited boot-passthrough.sh
 
