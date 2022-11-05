@@ -3,11 +3,13 @@ This is the complete config of my home server, it is very specific to me and I t
 
 Hardware
 --------
-**CPU:** Ryzen 9 3900X
-**GPU:** Radeon RX 5500 XT 8GB
-**RAM:** Corsair Vengeance LPX 32GB
-**Motherboard:** Gigabyte X570 I AORUS PRO WiFi
-**Cooling:** Corsair Hydro H60 2018
+```
+CPU: Ryzen 9 3900X
+GPU: Radeon RX 5500 XT 8GB
+RAM: Corsair Vengeance LPX 32GB
+Motherboard: Gigabyte X570 I AORUS PRO WiFi
+Cooling: Corsair Hydro H60 2018
+```
 
 Software
 --------
