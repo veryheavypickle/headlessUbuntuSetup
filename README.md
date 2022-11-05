@@ -16,13 +16,16 @@ This is specified in `install.sh`
 
 BIOS Setup
 ----------
-`CPU Vcore [0.93750V]`
-`Extreme Memory profile [Profile1]`
-`SVM Mode [Enabled]`
-`IOMMU [Enabled]`
-`CPU_Fan Speed [Manual]`
-`CPU_Fan Stop [Enabled]`
-`Sys_Fan1 Speed Control [Silent]`
+```
+CPU Vcore [0.93750V]
+Extreme Memory profile [Profile1]
+SVM Mode [Enabled]
+IOMMU [Enabled]
+CPU_Fan Speed [Manual]
+CPU_Fan Stop [Enabled]
+Sys_Fan1 Speed Control [Silent]
+CSM [Disabled]
+```
 
 ### Fan curve
 At the undervolt I have, this is sufficient since the watercooler pump always runs at 100%.
@@ -56,7 +59,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1"
 `sudo update-grub`
 
 ### Reboot
-`sudo shutdown now`
+`sudo reboot`
 
 ### Verify IOMMU is enabled
 `sudo dmesg | grep IOMMU`
@@ -79,7 +82,9 @@ Output with GPU connected
 **For the remainder of this, I left the GPU connected.**
 
 ## Enable IOMMU group
-`for a in /sys/kernel/iommu_groups/*; do find $a -type l; done | sort --version-sort`
+```
+for a in /sys/kernel/iommu_groups/*; do find $a -type l; done | sort --version-sort
+```
 
 Output should be something like
 ```
