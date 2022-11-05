@@ -96,8 +96,10 @@ Output should be something like
 ```
 
 ## Using vfio-pci to manage PCI device
-This will show all the VGA controllers (AMD or NVIDIA) `lspci -nn | grep -i VGA`
-`0a:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [1002:7340] (rev c5)`
+This will show all the VGA controllers - ie. video cards (AMD or NVIDIA) `lspci -nn | grep -i VGA`
+```
+0a:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 14 [Radeon RX 5500/5500M / Pro 5500M] [1002:7340] (rev c5)
+```
 
 Show USB controllers, as I will probably need USB `lspci -nn | grep -i USB`
 ```
@@ -113,25 +115,32 @@ Show all the Audio controllers for AMD `lspci -nn | grep Audio`. I am assuming I
 ```
 
 Data for the GPU
-PCI ID `0a:00.0`
-Vendor ID: `1002`
-Device ID: `7340`
+```
+PCI ID: 0a:00.0
+Vendor ID: 1002
+Device ID: 7340
+```
 
-Data for a random USB controller, since I would rather try one of the 3 usb controllers.
-PCI ID `05:00.3`
-Vendor ID: `1022`
-Device ID: `149c`
+Data for a random USB controller
+```
+PCI ID: 05:00.3
+Vendor ID: 1022
+Device ID: 149c
+```
 
 Data for HDMI audio controller
-PCI ID `0c:00.4`
-Vendor ID: `1002`
-Device ID: `ab38`
+```
+PCI ID: 0c:00.4
+Vendor ID: 1002
+Device ID: ab38
+```
 
 ### Configure GRUB
 `/etc/default/grub`
 Apply all the audio and VGA devices
-
-`GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 vfio-pci.ids=1002:7340,1022:149c,1002:ab38"`
+```
+GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 vfio-pci.ids=1002:7340,1022:149c,1002:ab38"
+```
 
 ### Update GRUB
 `sudo update-grub`
@@ -139,7 +148,7 @@ Apply all the audio and VGA devices
 ### Reboot
 `sudo reboot`
 
-When rebooted, the screen shows only the Aorus logo, this seems to be good news.
+When rebooted, the screen should freeze.
 
 ### Verify PCI device is managed by vfio-pci
 `lspci -nnv`
