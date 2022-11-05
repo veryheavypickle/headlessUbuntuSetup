@@ -141,9 +141,9 @@ Device ID: ab38
 
 ### Configure GRUB
 `/etc/default/grub`
-Apply all the audio and VGA devices
+Apply all the audio and VGA devices plus extra arguments
 ```
-GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 vfio-pci.ids=1002:7340,1022:149c,1002:ab38"
+GRUB_CMDLINE_LINUX_DEFAULT="iommu=pt amd_iommu=on vfio-pci.ids=1002:7340,1002:ab38,1022:149c kvm.ignore_msrs=1 video=vesafb:off,efifb:off"
 ```
 
 ### Update GRUB
@@ -152,7 +152,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 v
 ### Reboot
 `sudo reboot`
 
-When rebooted, the screen should freeze.
+When rebooted, the screen should freeze. Before this, I hope you set up an SSH connection, I should have mentioned this before lol
 
 ### Verify PCI device is managed by vfio-pci
 `lspci -nnv`
