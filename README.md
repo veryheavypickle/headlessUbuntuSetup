@@ -52,11 +52,11 @@ Boot into BIOS and set IOMMU to Enabled and CSM to Disabled
 Edit `/etc/default/grub`
 For an Intel CPU
 ```
-iommu=pt intel_iommu=on
+GRUB_CMDLINE_LINUX_DEFAULT="iommu=pt intel_iommu=on"
 ```
 For an AMD CPU
 ```
-iommu=pt amd_iommu=on
+GRUB_CMDLINE_LINUX_DEFAULT="iommu=pt amd_iommu=on"
 ```
 
 ### Update GRUB
