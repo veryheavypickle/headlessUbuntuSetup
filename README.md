@@ -13,7 +13,7 @@ Cooling: Corsair Hydro H60 2018
 
 Software
 --------
-**OS: ** 22.04.1 LTS
+**OS:** 22.04.1 LTS
 This is specified in `install.sh`
 
 BIOS Setup
