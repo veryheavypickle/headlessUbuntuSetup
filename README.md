@@ -83,6 +83,7 @@ Output with GPU connected
 [    3.119906] AMD-Vi: AMD IOMMUv2 loaded and initialized
 ```
 
+Check which groups there are
 ```
 for a in /sys/kernel/iommu_groups/*; do find $a -type l; done | sort --version-sort
 ```
