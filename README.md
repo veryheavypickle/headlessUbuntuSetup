@@ -39,20 +39,22 @@ At the undervolt I have, this is sufficient since the watercooler pump always ru
 Headless Setup
 --------------
 ## Setup for AMD and NVIDIA GPUs on Intel or AMD CPUs
-With help from [KVM GPU Passthrough](https://bananaapple.tw/blog/kvm-gpu-passthrough-ubuntu-20-04/) I can set up the changes necessasary to pass the GPU to a VM. I have modified these instructions for an AMD GPU but have included the original an NVIDIA GPU too.
+With help from [KVM GPU Passthrough](https://bananaapple.tw/blog/kvm-gpu-passthrough-ubuntu-20-04/)  and [OSX-KVM](https://github.com/kholia/OSX-KVM/blob/master/notes.md) I can set up the changes necessasary to pass the GPU to a VM. I have modified these instructions for an AMD GPU but have included the original an NVIDIA GPU too.
 
 
 ## Enable IOMMU
 ### In BIOS
-Boot into BIOS and set IOMMU to Enabled
+Boot into BIOS and set IOMMU to Enabled and CSM to Disabled
 
 ### Configure GRUB
 Edit `/etc/default/grub`
+For an Intel CPU
 ```
-# Intel CPU
-GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on"
-# AMD CPU
-GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1"
+iommu=pt intel_iommu=on
+```
+For an AMD CPU
+```
+iommu=pt amd_iommu=on
 ```
 
 ### Update GRUB
