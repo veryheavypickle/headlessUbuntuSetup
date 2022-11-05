@@ -83,13 +83,9 @@ Output with GPU connected
 [    3.119906] AMD-Vi: AMD IOMMUv2 loaded and initialized
 ```
 
-**For the remainder of this, I left the GPU connected.**
-
-## Enable IOMMU group
 ```
 for a in /sys/kernel/iommu_groups/*; do find $a -type l; done | sort --version-sort
 ```
-
 Output should be something like
 ```
 /sys/kernel/iommu_groups/0/devices/0000:00:00.0
@@ -98,6 +94,8 @@ Output should be something like
 /sys/kernel/iommu_groups/3/devices/0000:00:04.2
 /sys/kernel/iommu_groups/4/devices/0000:00:04.3
 ```
+
+**For the remainder of this, I left the GPU connected.**
 
 ## Using vfio-pci to manage PCI device
 This will show all the VGA controllers - ie. video cards (AMD or NVIDIA) `lspci -nn | grep -i VGA`
