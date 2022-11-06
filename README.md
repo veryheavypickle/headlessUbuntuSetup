@@ -237,4 +237,4 @@ Change the USB, GPU and GPU audio addresses to the ones found above in `boot-pas
 ```
 sudo ./boot-passthrough.sh
 ```
-When running this, I got to the drive picker screen, but then got a blackscreen afterwards. The OSX-KVM notes reccomend to first run the macOS installer using `OpenCore-Boot.sh` then booting into the finished install using `./boot-passthrough.sh`.
+When running this, I got to the drive picker screen, but then got a blackscreen afterwards. The OSX-KVM notes reccomend to first run the macOS installer using `OpenCore-Boot.sh` then booting into the finished install using `./boot-passthrough.sh`. I will try to do this on a linux mint virtual machine on my laptop. VM inception time.
