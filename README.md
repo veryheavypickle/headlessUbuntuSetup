@@ -238,3 +238,5 @@ Change the USB, GPU and GPU audio addresses to the ones found above in `boot-pas
 sudo ./boot-passthrough.sh
 ```
 When running this, I got to the drive picker screen, but then got a blackscreen afterwards. The OSX-KVM notes reccomend to first run the macOS installer using `OpenCore-Boot.sh` then booting into the finished install using `./boot-passthrough.sh`. I will try to do this on a linux mint virtual machine on my laptop. VM inception time.
+
+The [OSX-KVM Guide](https://github.com/kholia/OSX-KVM) reccomends to use a non-APFS filesystem. In my case this didn't work. As I have setup a bare metal OpenCore machine in the past and have read the current [OpenCore documentaion](https://caizhiyuan.gitee.io/opencore-install-guide/installation/installation-process.html#booting-the-opencore-usb) I found it was reccomended to use an APFS file-system.
