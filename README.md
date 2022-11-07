@@ -31,6 +31,13 @@ Sys_Fan1 Speed Control [Silent]
 CSM [Disabled]
 ```
 
+### Power savings
+For nomal usage, I can leave the voltage at 0.93750V and not expect any drop in performance, due to the looming energy crisis and to be fair on my roomates, I will now configure the minimum voltage required for arbitrary max CPU frequencies.
+```
+1.5 GHz [0.93750V]
+```
+
+
 ### Fan curve
 At the undervolt I have, this is sufficient since the watercooler pump always runs at 100%.
 ```
