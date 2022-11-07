@@ -233,10 +233,16 @@ qemu-img create -f qcow2 mac_hdd_ng.img 128G
 ### Edit config to allow passthrough
 Change the USB, GPU and GPU audio addresses to the ones found above in `boot-passthrough.sh` .
 
-### Run the VM
-```
-sudo ./boot-passthrough.sh
-```
-When running this, I got to the drive picker screen, but then got a blackscreen afterwards. The OSX-KVM notes reccomend to first run the macOS installer using `OpenCore-Boot.sh` then booting into the finished install using `./boot-passthrough.sh`. I will try to do this on a linux mint virtual machine on my laptop. VM inception time.
+### Booting the VM
+Due to the *pickyness* of macOS, I needed to complete some extra steps. Basically, with a perfect setup, you can run `boot-passthrough.sh` right now, but it probably won't work. However what is required is to first run `OpenCore-Boot.sh` to install macOS. In my case, when running `boot-passthrough.sh`, I got to the drive picker screen, but then got a blackscreen afterwards and couldn't reach the recovery screen. As I couldn't be bothered to buy a new SSD, or partition the current one, I ran `OpenCore-Boot.sh` in a Linux Mint VM, inside my 2013 MacBook Pro (slow). VM inception time. My laptops hardware is decently fast, 8 thread i7 with 16 GB RAM and dual GPU, but a VM inside a VM sounds as slow as it sounds, no matter the hardware.
 
-The [OSX-KVM Guide](https://github.com/kholia/OSX-KVM) reccomends to use a non-APFS filesystem. In my case this didn't work. As I have setup a bare metal OpenCore machine in the past and have read the current [OpenCore documentaion](https://caizhiyuan.gitee.io/opencore-install-guide/installation/installation-process.html#booting-the-opencore-usb) I found it was reccomended to use an APFS file-system.
+### Boot to recovery
+The OSX-KVM notes reccomend to first run the macOS installer using `OpenCore-Boot.sh` before using your `boot-passthrough.sh` script. Run `OpenCore-Boot.sh` with sudo, ignore all options in the boot picker but something along the lines of `recovery`.
+
+### Format the drive
+Once booted in, hopefully there are no errors even in the QEMU log, (I did have some host cpu doesn't support function) you should format your disk using disk utility as `APFS` with `GUID partition Scheme`. The [OSX-KVM Guide](https://github.com/kholia/OSX-KVM) reccomends to use a non-APFS filesystem. In my case this didn't work. I found it was reccomended to use an APFS file-system.
+
+#### Install macOS
+Exit Disk Utility and (Re)Install macOS. This will take some time, (especially in my case). Once done, you will be presented with the boot picker again, and to continue installing, you need to boot into `macOS installer`.
+
+
