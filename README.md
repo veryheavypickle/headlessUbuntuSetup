@@ -21,14 +21,15 @@ This is specified in `install.sh`
 BIOS Setup
 ----------
 ```
-CPU Vcore [0.93750V]
 Extreme Memory profile [Profile1]
+CPU Vcore [0.93750V]
+Core Performance Boost [Disabled]
 SVM Mode [Enabled]
 IOMMU [Enabled]
+CSM [Disabled]
 CPU_Fan Speed [Manual]
 CPU_Fan Stop [Enabled]
 Sys_Fan1 Speed Control [Silent]
-CSM [Disabled]
 ```
 
 ### Power savings
