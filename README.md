@@ -262,3 +262,7 @@ First and formost sudo usermod -aG audio $(whoami) otherwise for some reason apl
 follow https://github.com/mikebrady/shairport-sync/blob/master/BUILD.md
 
 and install 'sudo apt install alsa-utils'
+
+https://www.alsa-project.org/main/index.php/Setting_the_default_device
+then find your available cards cat /proc/asound/cards
+and set the config default with that card
