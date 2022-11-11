@@ -254,3 +254,6 @@ Once booted in, hopefully there are no errors even in the QEMU log, (I did have 
 Exit Disk Utility and (Re)Install macOS. This will take some time, (especially in my case). Once done, you will be presented with the boot picker again, and to continue installing, you need to boot into `macOS installer`.
 
 
+AirPlay 2 Setup
+---------------
+
