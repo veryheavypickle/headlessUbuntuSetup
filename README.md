@@ -257,3 +257,5 @@ Exit Disk Utility and (Re)Install macOS. This will take some time, (especially i
 AirPlay 2 Setup
 ---------------
 
+First and formost sudo usermod -aG audio $(whoami) otherwise for some reason aplay will no connect my sound dac
+
