@@ -259,3 +259,4 @@ AirPlay 2 Setup
 
 First and formost sudo usermod -aG audio $(whoami) otherwise for some reason aplay will no connect my sound dac
 
+follow https://github.com/mikebrady/shairport-sync/blob/master/BUILD.md
